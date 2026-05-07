@@ -1,0 +1,16 @@
+{
+  "name": "ejercicio2-typescript",
+  "version": "1.0.0",
+  "description": "Ejercicio 2: Enumeraciones en TypeScript - UNETI",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "ts-node src/app.ts",
+    "build": "tsc",
+    "dev": "ts-node src/app.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.39",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

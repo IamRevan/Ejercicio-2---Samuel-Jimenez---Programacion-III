@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>CineVibe — Ejercicio 2 TypeScript | UNETI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top right, #e1e0ff 0%, #fcf8ff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── HEADER ── */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+        }
+        .logo { font-size: 1.75rem; font-weight: 800; color: #4648d4; }
+        .badge {
+            background: rgba(70,72,212,0.1);
+            border: 1px solid rgba(70,72,212,0.2);
+            border-radius: 9999px;
+            padding: 0.35rem 1rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #4648d4;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* ── MAIN ── */
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 1.5rem 3rem;
+            gap: 2rem;
+        }
+
+        .page-header { text-align: center; }
+        .page-header h1 { font-size: 1.8rem; font-weight: 800; color: #1b1b23; }
+        .page-header h1 span { color: #4648d4; }
+        .page-header p { font-size: 0.9rem; color: #767586; margin-top: 0.4rem; }
+
+        /* ── SECTION TITLE ── */
+        .section-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #8127cf;
+            text-align: center;
+        }
+
+        /* ── ENUM GRID ── */
+        .enum-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            width: 100%;
+            max-width: 860px;
+        }
+
+        .glass-card {
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 24px rgba(49,46,129,0.07);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(70,72,212,0.1);
+        }
+        .card-header .icon { font-size: 1.25rem; }
+        .card-header h2 { font-size: 1rem; font-weight: 700; color: #1b1b23; }
+
+        .enum-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+        .enum-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.55rem 0.85rem;
+            border-radius: 0.75rem;
+            background: rgba(255,255,255,0.5);
+            border: 1px solid rgba(199,196,215,0.4);
+            font-size: 0.9rem;
+            color: #1b1b23;
+            transition: transform 0.18s ease, background 0.18s ease;
+        }
+        .enum-item:hover {
+            background: rgba(70,72,212,0.06);
+            transform: translateX(5px);
+        }
+        .num {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #8127cf;
+            background: rgba(129,39,207,0.1);
+            border-radius: 50%;
+            width: 22px; height: 22px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* ── MOVIES GRID ── */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            width: 100%;
+            max-width: 860px;
+        }
+
+        .movie-card {
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 24px rgba(49,46,129,0.07);
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+        }
+        .movie-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(49,46,129,0.12);
+        }
+
+        .movie-emoji { font-size: 2rem; margin-bottom: 0.75rem; }
+
+        .movie-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #4648d4, #8127cf);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+        }
+
+        .movie-fields { display: flex; flex-direction: column; gap: 0.4rem; }
+        .field {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #464554;
+        }
+        .field-icon { font-size: 0.9rem; }
+        .field strong { color: #1b1b23; font-weight: 600; }
+
+        .genre-pill {
+            display: inline-block;
+            margin-top: 0.75rem;
+            padding: 0.3rem 0.85rem;
+            background: rgba(70,72,212,0.08);
+            border: 1px solid rgba(70,72,212,0.15);
+            border-radius: 9999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #4648d4;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: rgba(255,255,255,0.4);
+            backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(199,196,215,0.4);
+            padding: 1.75rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .footer-left p:first-child { font-weight: 800; font-size: 1rem; color: #4648d4; }
+        .footer-left p:last-child { font-size: 0.8rem; color: #767586; }
+        .footer-right { text-align: right; }
+        .footer-right p:first-child { font-weight: 700; color: #1b1b23; }
+        .footer-right p:nth-child(2) { font-size: 0.8rem; color: #767586; }
+        .footer-right p:last-child {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: rgba(70,72,212,0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.2rem;
+        }
+
+        @media (max-width: 600px) {
+            header, footer { padding: 1.25rem 1.5rem; }
+            footer { flex-direction: column; text-align: center; }
+            .footer-right { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="animate__animated animate__fadeInDown">
+        <div class="logo">CineVibe</div>
+        <div class="badge">Ejercicio 2 — TypeScript</div>
+    </header>
+
+    <main>
+        <!-- Título de página -->
+        <div class="page-header animate__animated animate__fadeIn">
+            <h1>Enumeraciones en <span>TypeScript</span></h1>
+            <p>Catálogo de películas con tipado estático y enumeraciones</p>
+        </div>
+
+        <!-- Enums -->
+        <p class="section-title animate__animated animate__fadeIn">Valores de las Enumeraciones</p>
+
+        <div class="enum-grid animate__animated animate__fadeInUp animate__delay-1s">
+            <!-- Géneros -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <span class="icon">🎭</span>
+                    <h2>Géneros de Películas</h2>
+                </div>
+                <ul class="enum-list">
+                    <li class="enum-item"><span class="num">1</span> Acción</li>
+                    <li class="enum-item"><span class="num">2</span> Ciencia Ficción</li>
+                    <li class="enum-item"><span class="num">3</span> Drama</li>
+                    <li class="enum-item"><span class="num">4</span> Comedia</li>
+                    <li class="enum-item"><span class="num">5</span> Terror</li>
+                </ul>
+            </div>
+
+            <!-- Países -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <span class="icon">🌍</span>
+                    <h2>Países de Origen</h2>
+                </div>
+                <ul class="enum-list">
+                    <li class="enum-item"><span class="num">1</span> Estados Unidos</li>
+                    <li class="enum-item"><span class="num">2</span> España</li>
+                    <li class="enum-item"><span class="num">3</span> Reino Unido</li>
+                    <li class="enum-item"><span class="num">4</span> México</li>
+                    <li class="enum-item"><span class="num">5</span> Japón</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Películas -->
+        <p class="section-title animate__animated animate__fadeIn">Catálogo de Películas</p>
+
+        <div class="movies-grid animate__animated animate__zoomIn animate__delay-1s">
+            <!-- Película 1 -->
+            <div class="movie-card">
+                <div class="movie-emoji">🚀</div>
+                <div class="movie-title">Interstellar</div>
+                <div class="movie-fields">
+                    <div class="field"><span class="field-icon">🎭</span><span><strong>Género:</strong> Ciencia Ficción</span></div>
+                    <div class="field"><span class="field-icon">🌍</span><span><strong>País:</strong> Estados Unidos</span></div>
+                    <div class="field"><span class="field-icon">📅</span><span><strong>Año:</strong> 2014</span></div>
+                </div>
+                <span class="genre-pill">Ciencia Ficción</span>
+            </div>
+
+            <!-- Película 2 -->
+            <div class="movie-card">
+                <div class="movie-emoji">🌿</div>
+                <div class="movie-title">El Laberinto del Fauno</div>
+                <div class="movie-fields">
+                    <div class="field"><span class="field-icon">🎭</span><span><strong>Género:</strong> Drama</span></div>
+                    <div class="field"><span class="field-icon">🌍</span><span><strong>País:</strong> España</span></div>
+                    <div class="field"><span class="field-icon">📅</span><span><strong>Año:</strong> 2006</span></div>
+                </div>
+                <span class="genre-pill">Drama</span>
+            </div>
+
+            <!-- Película 3 -->
+            <div class="movie-card">
+                <div class="movie-emoji">🏯</div>
+                <div class="movie-title">Spirited Away</div>
+                <div class="movie-fields">
+                    <div class="field"><span class="field-icon">🎭</span><span><strong>Género:</strong> Drama</span></div>
+                    <div class="field"><span class="field-icon">🌍</span><span><strong>País:</strong> Japón</span></div>
+                    <div class="field"><span class="field-icon">📅</span><span><strong>Año:</strong> 2001</span></div>
+                </div>
+                <span class="genre-pill">Drama</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="animate__animated animate__fadeInUp">
+        <div class="footer-left">
+            <p>UNETI</p>
+            <p>Universidad Nacional Experimental de las Telecomunicaciones e Informática</p>
+        </div>
+        <div class="footer-right">
+            <p>Samuel Jimenez</p>
+            <p>C.I. 31192094</p>
+            <p>Ejercicio 2 — Programación TypeScript</p>
+        </div>
+    </footer>
+
+</body>
+</html>
